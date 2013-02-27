@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>pb-backend</artifactId>
+		<groupId>pb-backend</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>pb-backend-ear</artifactId>
+	<packaging>ear</packaging>
+
+	<name>pb-backend EAR module</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<!-- Depend on the ejb module and war so that we can package them -->
+		<dependency>
+			<groupId>pb-backend</groupId>
+			<artifactId>pb-backend-ejb</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>pb-backend</groupId>
+			<artifactId>pb-backend-web</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+
+		<dependency>
+			<groupId>pb-core</groupId>
+			<artifactId>pb-core</artifactId>
+			<type>jar</type>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>pb-backend</finalName>
+		<defaultGoal>package</defaultGoal>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ear-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<generateApplicationXml>true</generateApplicationXml>
+					<version>6</version>
+					<defaultLibBundleDir>lib</defaultLibBundleDir>
+
+					<modules>
+						<jarModule>
+							<groupId>pb-core</groupId>
+							<artifactId>pb-core</artifactId>
+							<bundleDir>lib</bundleDir>
+						</jarModule>
+
+						<ejbModule>
+							<groupId>pb-backend</groupId>
+							<artifactId>pb-backend-ejb</artifactId>
+							<unpack>true</unpack>
+						</ejbModule>
+
+						<webModule>
+							<groupId>pb-backend</groupId>
+							<artifactId>pb-backend-web</artifactId>
+							<contextRoot>/pb-backend-web</contextRoot>
+							<unpack>true</unpack>
+						</webModule>
+					</modules>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jboss.as.plugins</groupId>
+				<artifactId>jboss-as-maven-plugin</artifactId>
+				<version>7.1.1.Final</version>
+			</plugin>
+		</plugins>
+	</build>
+</project>
